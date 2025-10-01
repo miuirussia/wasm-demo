@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "develop": "wasm-pack build wasm && vite",
-    "build": "wasm-pack build wasm && tsc -b && vite build",
+    "build": "wasm-pack build --release wasm && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
