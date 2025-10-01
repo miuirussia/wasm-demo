@@ -6,6 +6,9 @@ use wasm_bindgen::prelude::*;
 
 use crate::utils::set_panic_hook;
 
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
 #[derive(Tsify, Serialize, Deserialize)]
 #[tsify(into_wasm_abi)]
 pub struct Point {
