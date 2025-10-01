@@ -2,8 +2,9 @@ mod utils;
 
 use serde::{Deserialize, Serialize};
 use tsify::Tsify;
-use utils::set_panic_hook;
 use wasm_bindgen::prelude::*;
+
+use crate::utils::set_panic_hook;
 
 #[derive(Tsify, Serialize, Deserialize)]
 #[tsify(into_wasm_abi)]
