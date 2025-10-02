@@ -1,6 +1,7 @@
 mod utils;
 
 use serde::{Deserialize, Serialize};
+use serde_wasm_bindgen::Serializer;
 use tsify::Tsify;
 use wasm_bindgen::prelude::*;
 
@@ -10,19 +11,15 @@ use crate::utils::set_panic_hook;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[derive(Tsify, Serialize, Deserialize)]
-#[tsify(into_wasm_abi)]
 pub struct Point {
-    x: i32,
-    y: i32,
+  #[tsify(type = "bigint")]
+  x: i64,
+  #[tsify(type = "bigint")]
+  y: i64,
 }
 
-#[wasm_bindgen]
-extern "C" {
-    fn alert(s: &str);
-}
-
-#[wasm_bindgen]
-pub fn parse(s: &str) -> Point {
-    set_panic_hook();
-    serde_json::from_str(s).unwrap()
+#[wasm_bindgen(unchecked_return_type = "Point")]
+pub fn parse(s: &str) -> JsValue {
+  set_panic_hook();
+  (&serde_json::from_str::<Point>(s).unwrap()).serialize(&Serializer::new().serialize_large_number_types_as_bigints(true)).unwrap()
 }

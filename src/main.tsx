@@ -8,6 +8,7 @@ console.time('wasm init');
 console.log(wasm.parse('{ "x": 10, "y": 2 }'));
 console.timeEnd('wasm init');
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
