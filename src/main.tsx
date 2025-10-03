@@ -1,16 +1,23 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.tsx";
 import * as wasm from "wasm-pkg";
 
-console.time('wasm init');
-console.log(wasm.parse('{ "x": 10, "y": 2 }'));
-console.timeEnd('wasm init');
+await fetch("https://jsonplaceholder.typicode.com/photos")
+  .then((response) => response.text())
+  .then((json) => {
+    console.time("json");
+    console.log("json", JSON.parse(json));
+    console.timeEnd("json");
+    console.time("wasm");
+    console.log("wasm", wasm.parse(json));
+    console.timeEnd("wasm");
+  });
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />
-  </StrictMode>,
-)
+  </StrictMode>
+);
