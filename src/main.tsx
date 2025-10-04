@@ -3,6 +3,17 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import * as wasm from "wasm-pkg";
+import z from "zod";
+
+const photoScema = z.object({
+  albumId: z.number(),
+  id: z.bigint(),
+  title: z.string(),
+  url: z.string(),
+  thumbnailUrl: z.string(),
+});
+
+const photosSchema = z.array(photoScema);
 
 await fetch("https://jsonplaceholder.typicode.com/photos")
   .then((response) => response.text())
@@ -10,13 +21,15 @@ await fetch("https://jsonplaceholder.typicode.com/photos")
     console.time("json");
     console.log(
       "json",
-      JSON.parse(json, (key, value, context) => {
-        if (key === "id") {
-          return BigInt(context.source);
-        } else {
-          return value;
-        }
-      })
+      photosSchema.parse(
+        JSON.parse(json, (key, value, context) => {
+          if (key === "id") {
+            return BigInt(context.source);
+          } else {
+            return value;
+          }
+        })
+      )
     );
     console.timeEnd("json");
     console.time("wasm");
